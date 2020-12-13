@@ -49,10 +49,10 @@ public class StartMenuView extends JPanel {
         setBackground(Color.BLACK);
         setLayout(null);
 
-        // TODO
-        PrintListener listener = new PrintListener();
-        addButton(startButtonText, START_BUTTON_BOUNDS, START_BUTTON_ACTION_COMMAND, listener);
-        addButton("Exit", EXIT_BUTTON_BOUNDS, EXIT_BUTTON_ACTION_COMMAND, listener);
+        // Fix this
+        //PrintListener listener = new PrintListener();
+        addButton(startButtonText, START_BUTTON_BOUNDS, START_BUTTON_ACTION_COMMAND, null);
+        addButton("Exit", EXIT_BUTTON_BOUNDS, EXIT_BUTTON_ACTION_COMMAND, null);
     }
 
     private void addButton(
@@ -71,16 +71,4 @@ public class StartMenuView extends JPanel {
         g.drawImage(menuBackground, 0, 0, null);
     }
 
-    // TODO
-    private static class PrintListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            String actionCommand = event.getActionCommand();
-            if (actionCommand.equals(START_BUTTON_ACTION_COMMAND)) {
-                System.out.println("Start button pressed");
-            } else {
-                System.out.println("Exit button pressed");
-            }
-        }
-    }
 }

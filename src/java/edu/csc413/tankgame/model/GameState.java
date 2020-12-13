@@ -31,23 +31,122 @@ public class GameState {
 
     private final List<Entity> entities = new ArrayList<>();
 
-    public void addEntity(Entity tank) {
-        entities.add(tank);
+    private final List<Entity> newShells = new ArrayList<>();
+
+    public void addEntity(Entity entity) {
+        entities.add(entity);
     }
 
     public List<Entity> getEntities() {
         return entities;
     }
 
-    /*
-    public boolean upPressed() {
-        return true;
+    public void removeEntity(Entity entity) {
+        entities.remove(entity);
     }
 
-     */
-
-    /*
-    public Tank getTank(String id) {
+    public List<Entity> getNewShells() {
+        return newShells;
     }
-     */
+
+    public void addNewShell(Entity entity) {
+        newShells.add(entity);
+    }
+
+/*
+    //Trying this out
+    private final List<String> removableShells = new ArrayList<>();
+
+    public void addRemovableShell(String id) {
+        removableShells.add(id);
+    }
+
+    public List<String> getRemovableShells() {
+        return removableShells;
+    }
+
+    public void removeShells() {
+        for (Entity checkEntity: entities) {
+            for (String removableShell: removableShells) {
+                if (removableShell == checkEntity.getId()) {
+                    removeEntity(checkEntity);
+                }
+            }
+        }
+    }
+ */
+
+    public Entity getEntity(String id) {
+        for (Entity findEntity: entities) {
+            if (findEntity.getId() == id) {
+                return findEntity;
+            }
+        }
+        return null;
+    }
+
+    public double getShellXUpperBound() {
+        return SHELL_X_UPPER_BOUND;
+    }
+
+    public double getShellYUpperBound() {
+        return SHELL_Y_UPPER_BOUND;
+    }
+
+    public double getShellXLowerBound() {
+        return SHELL_X_LOWER_BOUND;
+    }
+
+    public double getShellYLowerBound() {
+        return SHELL_Y_LOWER_BOUND;
+    }
+
+
+    private boolean isUpPressed;
+    private boolean isDownPressed;
+    private boolean isLeftPressed;
+    private boolean isRightPressed;
+    private boolean isShootPressed;
+
+    public void upPressed(Boolean bool) {
+        isUpPressed = bool;
+    }
+
+    public void downPressed(Boolean bool) {
+        isDownPressed = bool;
+    }
+
+    public void leftPressed(Boolean bool) {
+        isLeftPressed = bool;
+    }
+
+    public void rightPressed(Boolean bool) {
+        isRightPressed = bool;
+    }
+
+    public void shootPressed(Boolean bool) {
+        isShootPressed = bool;
+    }
+
+
+    public boolean isUpPressed() {
+        return isUpPressed;
+    }
+
+    public boolean isDownPressed() {
+        return isDownPressed;
+    }
+
+    public boolean isLeftPressed() {
+        return isLeftPressed;
+    }
+
+    public boolean isRightPressed() {
+        return isRightPressed;
+    }
+
+    public boolean isShootPressed() {
+        return isShootPressed;
+    }
+
 }

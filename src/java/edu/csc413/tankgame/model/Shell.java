@@ -12,12 +12,10 @@ public class Shell extends Entity {
 
     private static long uniqueId = 0L;
 
-    private double x;
-    private double y;
-    private double angle;
-
     public Shell(double x, double y, double angle) {
         super(getUniqueId(), x, y, angle);
+        //String uniqueId = getUniqueId();
+        //super.updateId(getUniqueId());
     }
 
     private static String getUniqueId() {
@@ -27,5 +25,28 @@ public class Shell extends Entity {
     @Override
     public void move(GameState gameState) {
         moveForward();
+    }
+
+    @Override
+    protected void moveForward() {
+        setX(getX()+MOVEMENT_SPEED * Math.cos(getAngle()));
+        setY(getY()+MOVEMENT_SPEED * Math.sin(getAngle()));
+        //x += MOVEMENT_SPEED * Math.cos(getAngle());
+        //y += MOVEMENT_SPEED * Math.sin(getAngle());
+    }
+
+    @Override
+    protected void moveBackward() {
+
+    }
+
+    @Override
+    protected void turnLeft() {
+
+    }
+
+    @Override
+    protected void turnRight() {
+
     }
 }

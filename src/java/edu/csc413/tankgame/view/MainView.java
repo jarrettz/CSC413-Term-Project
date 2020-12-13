@@ -1,6 +1,6 @@
 package edu.csc413.tankgame.view;
 
-import com.sun.java.accessibility.util.TopLevelWindowListener;
+import edu.csc413.tankgame.GameKeyListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,11 +36,13 @@ public class MainView {
     private final CardLayout mainPanelLayout;
     private final RunGameView runGameView;
 
+    private final GameKeyListener gameKeyListener;
+
     // TODO: Finish implementing this.
     // MainView is responsible for assigning listeners to various UI components (like buttons and keyboard input).
     // However, we want to return control to GameDriver when those events happen. How can we have listeners that directs
     // us back to the code in GameDriver?
-    public MainView() {
+    public MainView(GameKeyListener gameKeyListener) {
         mainJFrame = new JFrame();
         mainJFrame.setVisible(false);
         mainJFrame.setResizable(false);
@@ -48,9 +50,9 @@ public class MainView {
         mainJFrame.setLocationRelativeTo(null);
         mainJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // TODO
-        //KeyListener listener = new PrintListener();
-        mainJFrame.addKeyListener(null);
+        // Potentially done with KeyListener
+        this.gameKeyListener = gameKeyListener;
+        mainJFrame.addKeyListener(gameKeyListener);
 
         mainPanel = new JPanel();
         mainPanelLayout = new CardLayout();
@@ -66,30 +68,6 @@ public class MainView {
         mainPanel.add(runGameView, Screen.RUN_GAME_SCREEN.getScreenName());
 
         mainJFrame.add(mainPanel);
-    }
-
-    // WRONG LOCATION FOR THIS
-    private class PrintListener implements KeyListener {
-        @Override
-        public void keyTyped(KeyEvent event) {
-
-        }
-
-        @Override
-        public void keyPressed(KeyEvent event) {
-            int keyCode = event.getKeyCode();
-            if (keyCode == KeyEvent.VK_W) {
-
-            }
-        }
-
-        @Override
-        public void keyReleased(KeyEvent event) {
-            int keyCode = event.getKeyCode();
-            if (keyCode == KeyEvent.VK_W) {
-
-            }
-        }
     }
 
     /**

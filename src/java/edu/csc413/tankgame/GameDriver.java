@@ -16,22 +16,23 @@ public class GameDriver {
     private final MainView mainView;
     private final RunGameView runGameView;
     private final GameState gameState;
+    private final GameKeyListener gameKeyListener;
 
     public GameDriver() {
-        mainView = new MainView();
-        runGameView = mainView.getRunGameView();
         gameState = new GameState();
+        gameKeyListener = new GameKeyListener(gameState);
+        mainView = new MainView(gameKeyListener);
+        runGameView = mainView.getRunGameView();
     }
 
     public void start() {
         // TODO: Implement.
         // This should set the MainView's screen to the start menu screen.
-        //mainView.setScreen(MainView.Screen.START_MENU_SCREEN);
+        // mainView.setScreen(MainView.Screen.START_MENU_SCREEN);
 
         // NOT CORRECT
         mainView.setScreen(MainView.Screen.RUN_GAME_SCREEN);
         runGame();
-
     }
 
     private void runGame() {
@@ -43,14 +44,14 @@ public class GameDriver {
                         RunGameView.PLAYER_TANK_INITIAL_ANGLE
                 );
         Tank aiTank =
-                new DumbAiTank(
+                new CushionTank(
                         GameState.AI_TANK_ID,
                         RunGameView.AI_TANK_INITIAL_X,
                         RunGameView.AI_TANK_INITIAL_Y,
                         RunGameView.AI_TANK_INITIAL_ANGLE
                 );
-        gameState.addTank(playerTank);
-        gameState.addTank(aiTank);
+        gameState.addEntity(playerTank);
+        gameState.addEntity(aiTank);
 
         runGameView.addDrawableEntity(
                 GameState.PLAYER_TANK_ID,
@@ -66,6 +67,19 @@ public class GameDriver {
                 aiTank.getY(),
                 aiTank.getAngle()
         );
+
+        for (WallImageInfo wallImageInfo: WallImageInfo.readWalls()) {
+            Wall newWall = new Wall(wallImageInfo.getX(), wallImageInfo.getY(), 0);
+            gameState.getEntities().add(newWall);
+
+            runGameView.addDrawableEntity(
+                    newWall.getId(),
+                    wallImageInfo.getImageFile(),
+                    newWall.getX(),
+                    newWall.getY(),
+                    0
+            );
+        }
 
         Runnable gameRunner = () -> {
             while (update()) {
@@ -85,21 +99,61 @@ public class GameDriver {
     // should be updated accordingly. It should return true as long as the game continues.
     private boolean update() {
         // Ask all tanks, shells, etc. to move
-        for (Entity tank: gameState.getEntities()) {
-            tank.move(gameState);
+        for (Entity entity: gameState.getEntities()) {
+            entity.move(gameState);
+        }
+
+        for (Entity entity: gameState.getEntities()) {
+            runGameView.setDrawableEntityLocationAndAngle(
+                    entity.getId(), entity.getX(), entity.getY(), entity.getAngle());
         }
 
         // Ask all tanks, shells, etc. to check bounds
 
         // Check collisions
 
-        for (Entity tank: gameState.getEntities()) {
-            runGameView.setDrawableEntityLocationAndAngle(
-                    tank.getId(), tank.getX(), tank.getY(), tank.getAngle());
+        // Ask gameState -- any new shells to draw?
+        // If so, call addDrawableEntity
+        for (Entity newShell: gameState.getNewShells()) {
+            runGameView.addDrawableEntity(
+                    newShell.getId(),
+                    RunGameView.SHELL_IMAGE_FILE,
+                    newShell.getX(),
+                    newShell.getY(),
+                    newShell.getAngle());
+            gameState.addEntity(newShell);
         }
+
+        // Ask gameState -- any shells to remove?
+        // If so, call removeDrawableEntity
+
+        /*
+        for (Entity checkShell: gameState.getEntities()) {
+            if (checkShell.getId().startsWith("shell")) {
+                if (
+                        checkShell.getX() < gameState.getShellXLowerBound()
+                        || checkShell.getX() > gameState.getShellXUpperBound()
+                        || checkShell.getY() < gameState.getShellYLowerBound()
+                        || checkShell.getY() > gameState.getShellYUpperBound()) {
+                    runGameView.removeDrawableEntity(checkShell.getId());
+                    gameState.removeEntity(checkShell);
+                }
+            }
+        }
+         */
+
 
         return true;
     }
+
+    /*
+    private boolean entitiesOverlap(Entity entity1, Entity entity2) {
+        return entity1.getX() < entity2.getXBound()
+                && entity1.getXBound() > entity2.getX()
+                && entity1.getY() < entity2.getYBound()
+                && entity1.getYBound() > entity2.getY();
+    }
+     */
 
     public static void main(String[] args) {
         GameDriver gameDriver = new GameDriver();

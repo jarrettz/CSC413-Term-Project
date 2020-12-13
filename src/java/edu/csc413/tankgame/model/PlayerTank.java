@@ -6,27 +6,23 @@ public class PlayerTank extends Tank {
         super(id, x, y, angle);
     }
 
+
     @Override
     public void move(GameState gameState) {
-
-    }
-
-    /*
-    @Override
-    public void move(GameState gameState) {
-        if (w is pressed) {
+        if (gameState.isUpPressed()) {
             moveForward();
         }
-        if (s is pressed) {
+        if (gameState.isDownPressed()) {
             moveBackward();
         }
-        if (d is pressed) {
+        if (gameState.isRightPressed()) {
             turnRight();
         }
-        if (a is pressed) {
+        if (gameState.isLeftPressed()) {
             turnLeft();
         }
+        if (gameState.isShootPressed()) {
+            shoot(gameState);
+        }
     }
-     */
-
 }

@@ -1,7 +1,8 @@
 package edu.csc413.tankgame.model;
 
 public abstract class Entity {
-    private final String id;
+
+    private String id;
     private double x;
     private double y;
     private double angle;
@@ -29,28 +30,30 @@ public abstract class Entity {
         return angle;
     }
 
-    public abstract void move(GameState gameState);
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setAngle(double angle) {
+        this.angle = angle;
+    }
 
     // TODO: The methods below are provided so you don't have to do the math for movement. However, note that they are
     // protected. You should not be calling these methods directly from outside the Tank class hierarchy. Instead,
     // consider how to design your Tank class(es) so that a Tank can represent both a player-controlled tank and an AI
     // controlled tank.
 
-    protected void moveForward() {
-        x += MOVEMENT_SPEED * Math.cos(angle);
-        y += MOVEMENT_SPEED * Math.sin(angle);
-    }
+    public abstract void move(GameState gameState);
 
-    protected void moveBackward() {
-        x -= MOVEMENT_SPEED * Math.cos(angle);
-        y -= MOVEMENT_SPEED * Math.sin(angle);
-    }
+    protected abstract void moveForward();
 
-    protected void turnLeft() {
-        angle -= TURN_SPEED;
-    }
+    protected abstract void moveBackward();
 
-    protected void turnRight() {
-        angle += TURN_SPEED;
-    }
+    protected abstract void turnLeft();
+
+    protected abstract void turnRight();
 }
