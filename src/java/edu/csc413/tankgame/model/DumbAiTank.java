@@ -11,6 +11,6 @@ public class DumbAiTank extends Tank {
         moveForward();
         turnRight();
 
-        shoot(gameState);
+        //shoot(gameState);
     }
 }

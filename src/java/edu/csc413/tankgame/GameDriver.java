@@ -56,14 +56,16 @@ public class GameDriver {
                         RunGameView.PLAYER_TANK_INITIAL_ANGLE
                 );
         Tank aiTank =
-                new CushionTank(
+                //cushion
+                new DumbAiTank(
                         GameState.AI_TANK_ID,
                         RunGameView.AI_TANK_INITIAL_X,
                         RunGameView.AI_TANK_INITIAL_Y,
                         RunGameView.AI_TANK_INITIAL_ANGLE
                 );
-        Tank turretTank =
-                new TurretAiTank(
+        Tank ai2Tank =
+                //turret
+                new DumbAiTank(
                         GameState.AI_TANK_2_ID,
                         RunGameView.AI_TANK_2_INITIAL_X,
                         RunGameView.AI_TANK_2_INITIAL_Y,
@@ -71,7 +73,7 @@ public class GameDriver {
                 );
         gameState.addEntity(playerTank);
         gameState.addEntity(aiTank);
-        gameState.addEntity(turretTank);
+        gameState.addEntity(ai2Tank);
 
         runGameView.addDrawableEntity(
                 GameState.PLAYER_TANK_ID,
@@ -90,9 +92,9 @@ public class GameDriver {
         runGameView.addDrawableEntity(
                 GameState.AI_TANK_2_ID,
                 RunGameView.AI_TANK_IMAGE_FILE,
-                turretTank.getX(),
-                turretTank.getY(),
-                turretTank.getAngle()
+                ai2Tank.getX(),
+                ai2Tank.getY(),
+                ai2Tank.getAngle()
         );
 
         for (WallImageInfo wallImageInfo: WallImageInfo.readWalls()) {
@@ -162,7 +164,19 @@ public class GameDriver {
         }
 
 
-            // Check collisions
+        // Check collisions
+        for (int i = 0; i < gameState.getEntities().size(); i++) {
+            for (int j = i + 1; j < gameState.getEntities().size(); j++) {
+                Entity entity1 = gameState.getEntities().get(i);
+                Entity entity2 = gameState.getEntities().get(j);
+                if (entity1.entitiesOverlap(entity1, entity2)) {
+                    handleCollision(entity1, entity2);
+                }
+            }
+        }
+        gameState.removeEntities();
+        gameState.removeShells();
+
 
         // Ask gameState -- any new shells to draw?
         // If so, call addDrawableEntity
@@ -194,18 +208,122 @@ public class GameDriver {
         // Removes all removable shells after iteration to make sure no error occurs
         gameState.removeShells();
 
+        if (gameState.getEntity(GameState.PLAYER_TANK_ID) == null) {
+            mainView.setScreen(MainView.Screen.END_MENU_SCREEN);
+            runGameView.reset();
+            gameState.getEntities().clear();
+            gameState.removeShells();
+            gameState.removeEntities();
+            return false;
+        }
+
         return true;
     }
 
-    /*
-    private boolean entitiesOverlap(Entity entity1, Entity entity2) {
-        return entity1.getX() < entity2.getXBound()
-                && entity1.getXBound() > entity2.getX()
-                && entity1.getY() < entity2.getYBound()
-                && entity1.getYBound() > entity2.getY();
-    }
-     */
+    public void handleCollision(Entity entity1, Entity entity2) {
+        if (entity1 instanceof Tank && entity2 instanceof Tank) {
+            gameState.addRemovableEntity(entity1);
+            gameState.addRemovableEntity(entity2);
+            runGameView.removeDrawableEntity(entity1.getId());
+            runGameView.removeDrawableEntity(entity2.getId());
 
+        } else if (entity1 instanceof Tank && entity2 instanceof Shell) {
+            ((Tank) entity1).lostHP();
+            if (((Tank) entity1).noHP()) {
+                gameState.addRemovableEntity(entity1);
+                runGameView.removeDrawableEntity(entity1.getId());
+            }
+            gameState.addRemovableShell(entity2);
+        } else if (entity1 instanceof Shell && entity2 instanceof Tank) {
+            ((Tank) entity2).lostHP();
+            if (((Tank) entity2).noHP()) {
+                gameState.addRemovableEntity(entity2);
+                runGameView.removeDrawableEntity(entity2.getId());
+            }
+            gameState.addRemovableShell(entity1);
+        } else if (entity1 instanceof Wall && entity2 instanceof Shell) {
+            ((Wall) entity1).lostHP();
+            if (((Wall) entity1).noHP()) {
+                gameState.addRemovableEntity(entity1);
+                runGameView.removeDrawableEntity(entity1.getId());
+            }
+            gameState.addRemovableShell(entity2);
+        } else if (entity1 instanceof Shell && entity2 instanceof Wall) {
+            ((Wall) entity2).lostHP();
+            if (((Wall) entity2).noHP()) {
+                gameState.addRemovableEntity(entity2);
+                runGameView.removeDrawableEntity(entity2.getId());
+            }
+            gameState.addRemovableShell(entity1);
+        } else if (entity1 instanceof Tank && entity2 instanceof Wall) {
+            tankWallInteraction(entity1, entity2);
+        } else if (entity1 instanceof Wall && entity2 instanceof Tank) {
+            tankWallInteraction(entity2, entity1);
+        }
+    }
+
+    public void tankWallInteraction(Entity tank, Entity wall) {
+        double smallestX;
+        double smallestY;
+
+        boolean right = false;
+        boolean left = false;
+        boolean up = false;
+        boolean down = false;
+
+        double x1 = tank.getXBound() - wall.getX();
+        double x2 = wall.getXBound() - tank.getX();
+
+        double y1 = tank.getYBound() - wall.getY();
+        double y2 = wall.getYBound() - tank.getY();
+
+        if (x1 < x2) {
+            smallestX = x1;
+            left = true;
+        } else {
+            smallestX = x2;
+            right = true;
+        }
+
+        if (y1 < y2) {
+            smallestY = y1;
+            up = true;
+        } else {
+            smallestY = y2;
+            down = true;
+        }
+
+        if (smallestX < smallestY) {
+            if (right) {
+                runGameView.setDrawableEntityLocationAndAngle(
+                        tank.getId(),
+                        tank.getX() + smallestX,
+                        tank.getY(),
+                        tank.getAngle());
+
+            } else {
+                runGameView.setDrawableEntityLocationAndAngle(
+                        tank.getId(),
+                        tank.getX() - smallestX,
+                        tank.getY(),
+                        tank.getAngle());
+            }
+        } else {
+            if (up) {
+                runGameView.setDrawableEntityLocationAndAngle(
+                        tank.getId(),
+                        tank.getX(),
+                        tank.getY() + smallestY,
+                        tank.getAngle());
+            } else  {
+                runGameView.setDrawableEntityLocationAndAngle(
+                        tank.getId(),
+                        tank.getX(),
+                        tank.getY() - smallestY,
+                        tank.getAngle());
+            }
+        }
+    }
     public static void main(String[] args) {
         GameDriver gameDriver = new GameDriver();
         gameDriver.start();

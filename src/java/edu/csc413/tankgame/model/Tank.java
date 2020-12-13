@@ -14,6 +14,7 @@ public abstract class Tank extends Entity{
         super(id, x, y, angle);
     }
 
+    double tankHP = 10;
     long lastAttack = 0;
     long coolDownTime = 200; // 2000 milliseconds
 
@@ -28,11 +29,6 @@ public abstract class Tank extends Entity{
     }
 
     protected void shoot(GameState gameState) {
-        /*
-        Shell shell = new Shell(getShellX(), getShellY(), getAngle());
-        gameState.addNewShell(shell);
-         */
-
         cooldown(gameState);
     }
 
@@ -40,39 +36,56 @@ public abstract class Tank extends Entity{
     // is created by this tank. It needs a slight offset so it appears from the front of the tank,
     // even if the tank is rotated. The shell should have the same angle as the tank.
 
+    public void lostHP() {
+        tankHP -= 1;
+        System.out.println(getId() + " lost 1 hp");
+    }
+
+    public boolean noHP() {
+        if (tankHP > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     private double getShellX() {
-        return getX() + 30.0 * (Math.cos(getAngle()) + 0.5);
+        return getX() + 50.0 * (Math.cos(getAngle()) + 0.5);
     }
 
     private double getShellY() {
-        return getY() + 30.0 * (Math.sin(getAngle()) + 0.5);
+        return getY() + 50.0 * (Math.sin(getAngle()) + 0.5);
     }
 
     @Override
     protected void moveForward() {
         setX(getX()+MOVEMENT_SPEED * Math.cos(getAngle()));
         setY(getY()+MOVEMENT_SPEED * Math.sin(getAngle()));
-        //x += MOVEMENT_SPEED * Math.cos(getAngle());
-        //y += MOVEMENT_SPEED * Math.sin(getAngle());
     }
 
     @Override
     protected void moveBackward() {
         setX(getX()-MOVEMENT_SPEED * Math.cos(getAngle()));
         setY(getY()-MOVEMENT_SPEED * Math.sin(getAngle()));
-        //x -= MOVEMENT_SPEED * Math.cos(getAngle());
-        //y -= MOVEMENT_SPEED * Math.sin(getAngle());
     }
 
     @Override
     protected void turnLeft() {
         setAngle(getAngle() - TURN_SPEED);
-        //angle -= TURN_SPEED;
     }
 
     @Override
     protected void turnRight() {
         setAngle(getAngle() + TURN_SPEED);
-        //angle += TURN_SPEED;
+    }
+
+    @Override
+    public double getXBound() {
+        return getX() + 55;
+    }
+
+    @Override
+    public double getYBound() {
+        return getY() + 55;
     }
 }

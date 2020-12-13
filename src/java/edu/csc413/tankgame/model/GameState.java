@@ -29,6 +29,7 @@ public class GameState {
     // Entity Variables and Functions
     private final List<Entity> entities = new ArrayList<>();
     private final List<Entity> newShells = new ArrayList<>();
+    private final List<Entity> removableEntities = new ArrayList<>();
     private final List<Entity> removableShells = new ArrayList<>();
 
     public void addEntity(Entity entity) {
@@ -37,6 +38,14 @@ public class GameState {
     public void addNewShell(Entity entity) {
         newShells.add(entity);
     }
+    public void addRemovableEntity(Entity entity) {
+        removableEntities.add(entity);
+    }
+    public void removeEntities() {
+        entities.removeAll(removableEntities);
+        removableEntities.clear();
+    }
+
     public void addRemovableShell(Entity entity) {
         removableShells.add(entity);
     }

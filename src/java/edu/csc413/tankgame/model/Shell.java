@@ -8,7 +8,8 @@ package edu.csc413.tankgame.model;
 // between the two classes so that the logic for e.g. moveForward, etc. are not duplicated.
 public class Shell extends Entity {
     private static final String SHELL_ID_PREFIX = "shell-";
-    private static final double MOVEMENT_SPEED = 4.0;
+    // Adjusted from speed of 4.0
+    private static final double MOVEMENT_SPEED = 1.0;
 
     private static long uniqueId = 0L;
 
@@ -36,17 +37,20 @@ public class Shell extends Entity {
     }
 
     @Override
-    protected void moveBackward() {
-
+    public double getXBound() {
+        return getX() + 24;
     }
 
     @Override
-    protected void turnLeft() {
-
+    public double getYBound() {
+        return getY() + 24;
     }
 
+    // Only implement for homing shells
     @Override
-    protected void turnRight() {
-
-    }
+    protected void moveBackward() {}
+    @Override
+    protected void turnLeft() {}
+    @Override
+    protected void turnRight() {}
 }

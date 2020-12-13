@@ -14,6 +14,13 @@ public abstract class Entity {
         this.angle = angle;
     }
 
+    public boolean entitiesOverlap(Entity entity1, Entity entity2) {
+        return entity1.getX() < entity2.getXBound()
+                && entity1.getXBound() > entity2.getX()
+                && entity1.getY() < entity2.getYBound()
+                && entity1.getYBound() > entity2.getY();
+    }
+
     public String getId() {
         return id;
     }
@@ -41,6 +48,9 @@ public abstract class Entity {
     public void setAngle(double angle) {
         this.angle = angle;
     }
+
+    public abstract double getXBound();
+    public abstract double getYBound();
 
     // TODO: The methods below are provided so you don't have to do the math for movement. However, note that they are
     // protected. You should not be calling these methods directly from outside the Tank class hierarchy. Instead,
