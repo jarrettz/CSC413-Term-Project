@@ -23,18 +23,22 @@ public class GameState {
 
     public static final String PLAYER_TANK_ID = "player-tank";
     public static final String AI_TANK_ID = "ai-tank";
-    // TODO: Feel free to add more tank IDs if you want to support multiple AI tanks! Just make sure they're unique.
+    public static final String AI2_TANK_ID = "ai2-tank";
 
-    // TODO: Implement.
-    // There's a lot of information the GameState will need to store to provide contextual information. Add whatever
-    // instance variables, constructors, and methods are needed.
 
+    // Entity Variables and Functions
     private final List<Entity> entities = new ArrayList<>();
-
     private final List<Entity> newShells = new ArrayList<>();
+    private final List<Entity> removableShells = new ArrayList<>();
 
     public void addEntity(Entity entity) {
         entities.add(entity);
+    }
+    public void addNewShell(Entity entity) {
+        newShells.add(entity);
+    }
+    public void addRemovableShell(Entity entity) {
+        removableShells.add(entity);
     }
 
     public List<Entity> getEntities() {
@@ -49,44 +53,6 @@ public class GameState {
         return newShells;
     }
 
-    public void addNewShell(Entity entity) {
-        newShells.add(entity);
-    }
-
-    private final List<Entity> removableShells = new ArrayList<>();
-
-    public void addRemovableShell(Entity entity) {
-        removableShells.add(entity);
-    }
-
-    public void removeShells() {
-        entities.removeAll(removableShells);
-        removableShells.clear();
-    }
-
-    /*
-    //Trying this out
-    private final List<String> removableShells = new ArrayList<>();
-
-    public void addRemovableShell(String id) {
-        removableShells.add(id);
-    }
-
-    public List<String> getRemovableShells() {
-        return removableShells;
-    }
-
-    public void removeShells() {
-        for (Entity checkEntity: entities) {
-            for (String removableShell: removableShells) {
-                if (removableShell == checkEntity.getId()) {
-                    removeEntity(checkEntity);
-                }
-            }
-        }
-    }
- */
-
     public Entity getEntity(String id) {
         for (Entity findEntity: entities) {
             if (findEntity.getId() == id) {
@@ -96,6 +62,12 @@ public class GameState {
         return null;
     }
 
+    public void removeShells() {
+        entities.removeAll(removableShells);
+        removableShells.clear();
+    }
+
+    // Shell Bounds
     public double getShellXUpperBound() {
         return SHELL_X_UPPER_BOUND;
     }
@@ -112,7 +84,25 @@ public class GameState {
         return SHELL_Y_LOWER_BOUND;
     }
 
+    // Tank Bounds
+    public double getTankXUpperBound() {
+        return SHELL_X_UPPER_BOUND;
+    }
 
+    public double getTankYUpperBound() {
+        return SHELL_Y_UPPER_BOUND;
+    }
+
+    public double getTankXLowerBound() {
+        return SHELL_X_LOWER_BOUND;
+    }
+
+    public double getTankYLowerBound() {
+        return SHELL_Y_LOWER_BOUND;
+    }
+
+
+    // GameState variables and functions for GameKeyListener
     private boolean isUpPressed;
     private boolean isDownPressed;
     private boolean isLeftPressed;
