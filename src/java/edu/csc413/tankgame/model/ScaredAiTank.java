@@ -25,6 +25,6 @@ public class ScaredAiTank extends Tank {
 
         moveBackward();
 
-        //shoot(gameState);
+        shoot(gameState);
     }
 }

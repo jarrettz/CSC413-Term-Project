@@ -23,7 +23,7 @@ public class TurretAiTank extends Tank {
             turnLeft();
         }
 
-        //shoot(gameState);
+        shoot(gameState);
     }
 
 }

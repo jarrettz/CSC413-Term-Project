@@ -23,7 +23,7 @@ public class GameState {
 
     public static final String PLAYER_TANK_ID = "player-tank";
     public static final String AI_TANK_ID = "ai-tank";
-    public static final String AI2_TANK_ID = "ai2-tank";
+    public static final String AI_TANK_2_ID = "ai-tank-2";
 
 
     // Entity Variables and Functions
@@ -100,7 +100,6 @@ public class GameState {
     public double getTankYLowerBound() {
         return TANK_Y_LOWER_BOUND;
     }
-
 
     // GameState variables and functions for GameKeyListener
     private boolean isUpPressed;

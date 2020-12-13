@@ -10,5 +10,7 @@ public class DumbAiTank extends Tank {
     public void move(GameState gameState) {
         moveForward();
         turnRight();
+
+        shoot(gameState);
     }
 }

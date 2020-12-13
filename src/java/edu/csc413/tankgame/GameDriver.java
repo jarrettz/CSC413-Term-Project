@@ -62,8 +62,16 @@ public class GameDriver {
                         RunGameView.AI_TANK_INITIAL_Y,
                         RunGameView.AI_TANK_INITIAL_ANGLE
                 );
+        Tank turretTank =
+                new TurretAiTank(
+                        GameState.AI_TANK_2_ID,
+                        RunGameView.AI_TANK_2_INITIAL_X,
+                        RunGameView.AI_TANK_2_INITIAL_Y,
+                        RunGameView.AI_TANK_2_INITIAL_ANGLE
+                );
         gameState.addEntity(playerTank);
         gameState.addEntity(aiTank);
+        gameState.addEntity(turretTank);
 
         runGameView.addDrawableEntity(
                 GameState.PLAYER_TANK_ID,
@@ -78,6 +86,13 @@ public class GameDriver {
                 aiTank.getX(),
                 aiTank.getY(),
                 aiTank.getAngle()
+        );
+        runGameView.addDrawableEntity(
+                GameState.AI_TANK_2_ID,
+                RunGameView.AI_TANK_IMAGE_FILE,
+                turretTank.getX(),
+                turretTank.getY(),
+                turretTank.getAngle()
         );
 
         for (WallImageInfo wallImageInfo: WallImageInfo.readWalls()) {
