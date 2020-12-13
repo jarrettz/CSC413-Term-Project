@@ -86,19 +86,19 @@ public class GameState {
 
     // Tank Bounds
     public double getTankXUpperBound() {
-        return SHELL_X_UPPER_BOUND;
+        return TANK_X_UPPER_BOUND;
     }
 
     public double getTankYUpperBound() {
-        return SHELL_Y_UPPER_BOUND;
+        return TANK_Y_UPPER_BOUND;
     }
 
     public double getTankXLowerBound() {
-        return SHELL_X_LOWER_BOUND;
+        return TANK_X_LOWER_BOUND;
     }
 
     public double getTankYLowerBound() {
-        return SHELL_Y_LOWER_BOUND;
+        return TANK_Y_LOWER_BOUND;
     }
 
 
@@ -128,7 +128,6 @@ public class GameState {
     public void shootPressed(Boolean bool) {
         isShootPressed = bool;
     }
-
 
     public boolean isUpPressed() {
         return isUpPressed;
