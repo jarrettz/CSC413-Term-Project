@@ -238,6 +238,7 @@ public class GameDriver {
                 runGameView.removeDrawableEntity(entity1.getId());
             }
             gameState.addRemovableShell(entity2);
+            runGameView.removeDrawableEntity(entity2.getId());
         } else if (entity1 instanceof Shell && entity2 instanceof Tank) {
             ((Tank) entity2).lostHP();
             if (((Tank) entity2).noHP()) {
@@ -245,6 +246,7 @@ public class GameDriver {
                 runGameView.removeDrawableEntity(entity2.getId());
             }
             gameState.addRemovableShell(entity1);
+            runGameView.removeDrawableEntity(entity1.getId());
         } else if (entity1 instanceof Wall && entity2 instanceof Shell) {
             ((Wall) entity1).lostHP();
             if (((Wall) entity1).noHP()) {
@@ -252,6 +254,7 @@ public class GameDriver {
                 runGameView.removeDrawableEntity(entity1.getId());
             }
             gameState.addRemovableShell(entity2);
+            runGameView.removeDrawableEntity(entity2.getId());
         } else if (entity1 instanceof Shell && entity2 instanceof Wall) {
             ((Wall) entity2).lostHP();
             if (((Wall) entity2).noHP()) {
@@ -259,6 +262,7 @@ public class GameDriver {
                 runGameView.removeDrawableEntity(entity2.getId());
             }
             gameState.addRemovableShell(entity1);
+            runGameView.removeDrawableEntity(entity1.getId());
         } else if (entity1 instanceof Tank && entity2 instanceof Wall) {
             tankWallInteraction(entity1, entity2);
         } else if (entity1 instanceof Wall && entity2 instanceof Tank) {
