@@ -14,9 +14,26 @@ public abstract class Tank extends Entity{
         super(id, x, y, angle);
     }
 
+    long lastAttack = 0;
+    long coolDownTime = 200; // 2000 milliseconds
+
+    public void cooldown(GameState gameState) {
+        long time = System.currentTimeMillis();
+        if (time > lastAttack + coolDownTime) {
+            // Do something
+            Shell shell = new Shell(getShellX(), getShellY(), getAngle());
+            gameState.addNewShell(shell);
+            lastAttack = time;
+        }
+    }
+
     protected void shoot(GameState gameState) {
+        /*
         Shell shell = new Shell(getShellX(), getShellY(), getAngle());
         gameState.addNewShell(shell);
+         */
+
+        cooldown(gameState);
     }
 
     // The following methods will be useful for determining where a shell should be spawned when it

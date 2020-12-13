@@ -112,7 +112,8 @@ public class GameDriver {
             while (update()) {
                 runGameView.repaint();
                 try {
-                    Thread.sleep(8L);
+                    // Changed from 8L
+                    Thread.sleep(15L);
                 } catch (InterruptedException exception) {
                     throw new RuntimeException(exception);
                 }
@@ -137,7 +138,31 @@ public class GameDriver {
 
         // Ask all tanks, shells, etc. to check bounds
 
-        // Check collisions
+        // Keeps Tank in Bounds
+        for (Entity entity: gameState.getEntities()) {
+            if (entity instanceof Tank) {
+                if (entity.getX() < gameState.getTankXLowerBound()) {
+                    runGameView.setDrawableEntityLocationAndAngle(
+                            entity.getId(), gameState.getTankXLowerBound(), entity.getY(), entity.getAngle());
+                }
+                if (entity.getX() > gameState.getTankXUpperBound()) {
+                    runGameView.setDrawableEntityLocationAndAngle(
+                            entity.getId(), gameState.getTankXUpperBound(), entity.getY(), entity.getAngle());
+                }
+                if (entity.getY() < gameState.getTankYLowerBound()) {
+                    runGameView.setDrawableEntityLocationAndAngle(
+                            entity.getId(), entity.getX(), gameState.getTankYLowerBound(), entity.getAngle());
+                }
+                if (entity.getY() > gameState.getTankYUpperBound()) {
+                    runGameView.setDrawableEntityLocationAndAngle(
+                            entity.getId(), entity.getX(), gameState.getTankYUpperBound(), entity.getAngle());
+
+                }
+            }
+        }
+
+
+            // Check collisions
 
         // Ask gameState -- any new shells to draw?
         // If so, call addDrawableEntity
@@ -153,7 +178,6 @@ public class GameDriver {
 
         // Ask gameState -- any shells to remove?
         // If so, call removeDrawableEntity
-
         for (Entity entity: gameState.getEntities()) {
             if (entity.getId().startsWith("shell")) {
                 if (
