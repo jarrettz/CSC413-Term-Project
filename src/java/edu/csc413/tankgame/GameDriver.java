@@ -127,7 +127,6 @@ public class GameDriver {
         // Ask gameState -- any shells to remove?
         // If so, call removeDrawableEntity
 
-        /*
         for (Entity checkShell: gameState.getEntities()) {
             if (checkShell.getId().startsWith("shell")) {
                 if (
@@ -135,13 +134,11 @@ public class GameDriver {
                         || checkShell.getX() > gameState.getShellXUpperBound()
                         || checkShell.getY() < gameState.getShellYLowerBound()
                         || checkShell.getY() > gameState.getShellYUpperBound()) {
-                    runGameView.removeDrawableEntity(checkShell.getId());
-                    gameState.removeEntity(checkShell);
+                    //runGameView.removeDrawableEntity(checkShell.getId());
+                    //gameState.removeEntity(checkShell);
                 }
             }
         }
-         */
-
 
         return true;
     }
