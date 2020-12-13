@@ -208,12 +208,16 @@ public class GameDriver {
         // Removes all removable shells after iteration to make sure no error occurs
         gameState.removeShells();
 
-        if (gameState.getEntity(GameState.PLAYER_TANK_ID) == null) {
+        if (gameState.getEntity(GameState.PLAYER_TANK_ID) == null
+                || (gameState.getEntity(GameState.AI_TANK_ID)) == null
+                && gameState.getEntity(GameState.AI_TANK_2_ID) == null
+                || gameState.isEscPressed()) {
             mainView.setScreen(MainView.Screen.END_MENU_SCREEN);
             runGameView.reset();
             gameState.getEntities().clear();
             gameState.removeShells();
             gameState.removeEntities();
+            gameState.resetEsc();
             return false;
         }
 

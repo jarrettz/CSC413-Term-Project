@@ -116,6 +116,7 @@ public class GameState {
     private boolean isLeftPressed;
     private boolean isRightPressed;
     private boolean isShootPressed;
+    private boolean isEscPressed;
 
     public void upPressed(Boolean bool) {
         isUpPressed = bool;
@@ -137,6 +138,10 @@ public class GameState {
         isShootPressed = bool;
     }
 
+    public void escPressed(Boolean bool) {
+        isEscPressed = bool;
+    }
+
     public boolean isUpPressed() {
         return isUpPressed;
     }
@@ -155,6 +160,14 @@ public class GameState {
 
     public boolean isShootPressed() {
         return isShootPressed;
+    }
+
+    public boolean isEscPressed() {
+        return isEscPressed;
+    }
+
+    public void resetEsc() {
+        isEscPressed = false;
     }
 
 }

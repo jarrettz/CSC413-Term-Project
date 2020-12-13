@@ -24,7 +24,7 @@ public class GameKeyListener implements KeyListener {
         if (keyCode == KeyEvent.VK_W) {
             gameState.upPressed(true);
         } else if (keyCode == KeyEvent.VK_ESCAPE) {
-            System.out.println("esc pressed");
+            gameState.escPressed(true);
         } else if (keyCode == KeyEvent.VK_S) {
             gameState.downPressed(true);
         } else if (keyCode == KeyEvent.VK_A) {
@@ -41,7 +41,6 @@ public class GameKeyListener implements KeyListener {
         if (keyCode == KeyEvent.VK_W) {
             gameState.upPressed(false);
         } else if (keyCode == KeyEvent.VK_ESCAPE) {
-            System.out.println("esc released");
         } else if (keyCode == KeyEvent.VK_S) {
             gameState.downPressed(false);
         } else if (keyCode == KeyEvent.VK_A) {
