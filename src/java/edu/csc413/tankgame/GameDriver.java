@@ -3,6 +3,11 @@ package edu.csc413.tankgame;
 import edu.csc413.tankgame.model.*;
 import edu.csc413.tankgame.view.MainView;
 import edu.csc413.tankgame.view.RunGameView;
+import edu.csc413.tankgame.view.StartMenuView;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Iterator;
 
 /**
  * GameDriver is the primary controller class for the tank game. The game is launched from GameDriver.main, and
@@ -17,22 +22,29 @@ public class GameDriver {
     private final RunGameView runGameView;
     private final GameState gameState;
     private final GameKeyListener gameKeyListener;
+    ActionListener actionListener = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            String actionCommand = event.getActionCommand();
+            if (actionCommand.equals(StartMenuView.START_BUTTON_ACTION_COMMAND)) {
+                mainView.setScreen(MainView.Screen.RUN_GAME_SCREEN);
+                runGame();
+            } else if (actionCommand.equals(StartMenuView.EXIT_BUTTON_ACTION_COMMAND)) {
+                mainView.closeGame();
+            }
+        }
+    };
 
     public GameDriver() {
         gameState = new GameState();
         gameKeyListener = new GameKeyListener(gameState);
-        mainView = new MainView(gameKeyListener);
+        mainView = new MainView(gameKeyListener, actionListener);
         runGameView = mainView.getRunGameView();
     }
 
     public void start() {
-        // TODO: Implement.
-        // This should set the MainView's screen to the start menu screen.
-        // mainView.setScreen(MainView.Screen.START_MENU_SCREEN);
-
-        // NOT CORRECT
-        mainView.setScreen(MainView.Screen.RUN_GAME_SCREEN);
-        runGame();
+        mainView.setScreen(MainView.Screen.START_MENU_SCREEN);
     }
 
     private void runGame() {
@@ -127,18 +139,21 @@ public class GameDriver {
         // Ask gameState -- any shells to remove?
         // If so, call removeDrawableEntity
 
-        for (Entity checkShell: gameState.getEntities()) {
-            if (checkShell.getId().startsWith("shell")) {
+        for (Entity entity: gameState.getEntities()) {
+            if (entity.getId().startsWith("shell")) {
                 if (
-                        checkShell.getX() < gameState.getShellXLowerBound()
-                        || checkShell.getX() > gameState.getShellXUpperBound()
-                        || checkShell.getY() < gameState.getShellYLowerBound()
-                        || checkShell.getY() > gameState.getShellYUpperBound()) {
-                    //runGameView.removeDrawableEntity(checkShell.getId());
-                    //gameState.removeEntity(checkShell);
+                        entity.getX() < gameState.getShellXLowerBound()
+                                || entity.getX() > gameState.getShellXUpperBound()
+                                || entity.getY() < gameState.getShellYLowerBound()
+                                || entity.getY() > gameState.getShellYUpperBound()) {
+                    // Remembers removable shells
+                    gameState.addRemovableShell(entity);
+                    runGameView.removeDrawableEntity(entity.getId());
                 }
             }
         }
+        // Removes all removable shells after iteration to make sure no error occurs
+        gameState.removeShells();
 
         return true;
     }

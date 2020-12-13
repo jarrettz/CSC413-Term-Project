@@ -53,7 +53,18 @@ public class GameState {
         newShells.add(entity);
     }
 
-/*
+    private final List<Entity> removableShells = new ArrayList<>();
+
+    public void addRemovableShell(Entity entity) {
+        removableShells.add(entity);
+    }
+
+    public void removeShells() {
+        entities.removeAll(removableShells);
+        removableShells.clear();
+    }
+
+    /*
     //Trying this out
     private final List<String> removableShells = new ArrayList<>();
 
